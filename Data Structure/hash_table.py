@@ -45,6 +45,16 @@ class HashTable:
             linked_list = self._get_linked_list_for_key(key)
             linked_list.append(key, value)
 
+    def delete_by_key(self, key):
+        """주어진 key에 해당하는 key - value 쌍을 삭제하는 메소드"""
+        node_to_delete = self._look_up_node(key)  # 이미 저장된 key인지 확인한다
+
+        # 저장되어 있는 key면 삭제한다
+        if node_to_delete is not None:
+            linked_list = self._get_linked_list_for_key(key)
+            linked_list.delete(node_to_delete)
+
+
     def __str__(self):
         """해시 테이블 문자열 메소드"""
         res_str = ""
