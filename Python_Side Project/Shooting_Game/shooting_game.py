@@ -72,13 +72,13 @@ class Missile(pygame.sprite.Sprite):
 class Rock(pygame.sprite.Sprite):
     def __init__(self, xpos, ypos, speed):
         super(Rock, self).__init__()
-        rock_image = ('rock01.png', 'rock02.png', 'rock03.png', 'rock04.png', 'rock05.png',
-              'rock06.png', 'rock07.png', 'rock08.png', 'rock09.png', 'rock10.png',
-              'rock11.png', 'rock12.png', 'rock13.png', 'rock14.png', 'rock15.png',
-              'rock16.png', 'rock17.png', 'rock18.png', 'rock19.png', 'rock20.png',
-              'rock21.png', 'rock22.png', 'rock23.png', 'rock24.png', 'rock25.png',
-              'rock26.png', 'rock27.png', 'rock28.png', 'rock29.png', 'rock30.png')
-        self.image = pygame.image.load(random.choice(rock_image))
+        rock_images = ('rock01.png', 'rock02.png', 'rock03.png', 'rock04.png', 'rock05.png', \
+                      'rock06.png', 'rock07.png', 'rock08.png', 'rock09.png', 'rock10.png', \
+                      'rock11.png', 'rock12.png', 'rock13.png', 'rock14.png', 'rock15.png', \
+                      'rock16.png', 'rock17.png', 'rock18.png', 'rock19.png', 'rock20.png', \
+                      'rock21.png', 'rock22.png', 'rock23.png', 'rock24.png', 'rock25.png', \
+                      'rock26.png', 'rock27.png', 'rock28.png', 'rock29.png', 'rock30.png')
+        self.image = pygame.image.load(random.choice(rock_images))
         self.rect = self.image.get_rect()
         self.rect.x = xpos
         self.rect.y = ypos
@@ -106,7 +106,7 @@ def occur_explosion(surface, x, y):
     explosion_rect.y = y
     surface.blit(explosion_image, explosion_rect)
 
-    explosion_sounds = ('explosion01.wav', 'explosion02.wav', 'explosion03.wav', 'explosion04.wav')
+    explosion_sounds = ('explosion01.wav', 'explosion02.wav', 'explosion03.wav')
     explosion_sound = pygame.mixer.Sound(random.choice(explosion_sounds))
     explosion_sound.play()
 
@@ -129,27 +129,24 @@ def game_loop():
     done = False
     while not done:
         for event in pygame.event.get():
-            if event.key == pygame.K_LEFT:
-                fighter.dx -= 5
-            elif event.key == pygame.K_RIGHT:
-                fighter.dx += 5
-            elif event.key == pygame.K_UP:
-                fighter.dy -= 5
-            elif event.key == pygame.K_DOWN:
-                fighter.dy += 5
-            elif event.key == pygame.K_SPACE:
-                missile = Missile(fighter.rect.centerx, fighter.rect.y, 10)
-                missile.launch()
-                missiles.add(missile)
-
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    fighter.dx -= 5
+                elif event.key == pygame.K_RIGHT:
+                    fighter.dx += 5
+                elif event.key == pygame.K_UP:
+                    fighter.dy -= 5
+                elif event.key == pygame.K_DOWN:
+                    fighter.dy += 5
+                elif event.key == pygame.K_SPACE:
+                    missile = Missile(fighter.rect.centerx, fighter.rect.y, 10)
+                    missile.launch()
+                    missiles.add(missile)
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                     fighter.dx = 0
                 elif event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                     fighter.dy = 0
-
-
-
 
         screen.blit(background_image, background_image.get_rect())
 
@@ -160,7 +157,8 @@ def game_loop():
         if random.randint(1, occur_prob) == 1:
             for i in range(occur_of_rocks):
                 speed = random.randint(min_rock_speed, max_rock_speed)
-                rock = Rock(random.randint(0, WINDOW_WIDTH -30), 0, speed)
+                rock = Rock(random.randint(0, WINDOW_WIDTH - 30), 0, speed)
+                rocks.add(rock)
 
         draw_text(f'파괴한 운석: {shot_count}', default_font, screen, 100, 20, YELLOW)
         draw_text(f"놓친 운석: {count_missed}", default_font, screen, 400, 20, RED)
@@ -242,19 +240,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
